@@ -147,5 +147,5 @@ theme: huxblog
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://codinglobster.github.io/codinglobster-blog
+  repo: git@github.com:codinglobster/codinglobster-blog.git
   branch: gh-pages
