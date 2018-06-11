@@ -3,8 +3,8 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Jeff's Blog
-subtitle: To Be A Lean Developer!
+title: codinglobster's Blog
+subtitle: Seeking the light of life
 author: Jeff Liu
 language:
 timezone:
@@ -19,9 +19,9 @@ permalink_defaults:
 #Custom Setting Start
 
 # Site settings
-SEOTitle: Kaijun的博客 | Kaijun's Blog
+SEOTitle: Jeff的博客 | Jeff's Blog
 header-img: img/home-bg.jpg
-email: Kaijun.cn@gmail.com
+email: liuxiaoabc@gmail.com
 description: ""
 keyword: ""
 
@@ -30,7 +30,7 @@ keyword: ""
 # RSS: false
 weibo_username:     Demonbane
 zhihu_username:     Demonbane
-github_username:    Kaijun
+github_username:    codinglobster
 twitter_username:   Demonbane_x
 facebook_username:  demonbane.cn
 linkedin_username:  kaijun-chen-42089354
