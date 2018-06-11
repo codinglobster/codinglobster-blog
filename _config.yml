@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Kaijun's Blog
+title: Jeff's Blog
 subtitle: To Be A Lean Developer!
-author: Kaijun Chen
+author: Jeff Liu
 language:
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://kaijun.rocks/hexo-theme-huxblog
-root: /hexo-theme-huxblog/
+url: https://codinglobster.github.io/
+root: /codinglobster-blog/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
