@@ -1,8 +1,8 @@
 ---
 layout: "about"
 title: "About"
-date: 2016-04-21 04:48:33
-description: "Hey, this is Kaijun."
+date: 2018-06-15 19:52:13
+description: "Hey, this is Jeff as codinglobster."
 header-img: "img/about-bg.jpg"
 comments: true
 ---
