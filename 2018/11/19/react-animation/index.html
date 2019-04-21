@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content>
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/codinglobster-blog/img/favicon.ico">
+
+    <title>
+        
+          react-animation-source-code-read - Jeff的博客 | Jeff&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://codinglobster.github.io/codinglobster-blog/2018/11/19/react-animation/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/codinglobster-blog/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/codinglobster-blog/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/codinglobster-blog/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/codinglobster-blog/">codinglobster&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/codinglobster-blog/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/codinglobster-blog/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/codinglobster-blog/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/codinglobster-blog/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://codinglobster.github.io/codinglobster-blog/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/codinglobster-blog/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/codinglobster-blog/tags/#react" title="react">react</a>
+                        
+                    </div>
+                    <h1>react-animation-source-code-read</h1>
+                    <h2 class="subheading">react-animation源码试探阅读</h2>
+                    <span class="meta">
+                        Posted by codinglobster on
+                        2018-11-19
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="React动画之社区实现"><a href="#React动画之社区实现" class="headerlink" title="React动画之社区实现"></a>React动画之社区实现</h1><p>react 动画实现由<code>Transition</code>、<code>CSSTransition</code>、<code>TransitionGroup</code>组成，三个组件分别实现了动画状态管理，动画css管理，和列表动画元素状态管理。</p>
+<h2 id="Transition"><a href="#Transition" class="headerlink" title="Transition"></a>Transition</h2><p>  <code>transition</code>组件是实现动画状态监管的核心组件，它本身并不实现任何动画逻辑，只是保存了当前组件的动画状态，和状态切换时的钩子函数调用。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> UNMOUNTED = <span class="string">'unmounted'</span> <span class="comment">// 未渲染</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> EXITED = <span class="string">'exited'</span> <span class="comment">// 退场的</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> ENTERING = <span class="string">'entering'</span> <span class="comment">// 进入中</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> ENTERED = <span class="string">'entered'</span> <span class="comment">// 进入的</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> EXITING = <span class="string">'exiting'</span> <span class="comment">// 退出的</span></span><br></pre></td></tr></table></figure></p>
+<p>以上是源码中定义的组件状态。</p>
+<h3 id="constuctor"><a href="#constuctor" class="headerlink" title="constuctor"></a>constuctor</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">constructor</span>(props, context) &#123;</span><br><span class="line">  <span class="keyword">super</span>(props, context)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> parentGroup = context.transitionGroup</span><br><span class="line">  <span class="comment">// In the context of a TransitionGroup all enters are really appears</span></span><br><span class="line">  <span class="keyword">let</span> appear =</span><br><span class="line">    parentGroup &amp;&amp; !parentGroup.isMounting ? props.enter : props.appear</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> initialStatus</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.appearStatus = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (props.in) &#123;</span><br><span class="line">    <span class="keyword">if</span> (appear) &#123;</span><br><span class="line">      initialStatus = EXITED</span><br><span class="line">      <span class="keyword">this</span>.appearStatus = ENTERING</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      initialStatus = ENTERED</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (props.unmountOnExit || props.mountOnEnter) &#123;</span><br><span class="line">      initialStatus = UNMOUNTED</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      initialStatus = EXITED</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.state = &#123; <span class="attr">status</span>: initialStatus &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.nextCallback = <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>构造器函数中，首先根据传入的Props来确认组件的初始状态。</p>
+<h3 id="getDerivedStateFromProps"><a href="#getDerivedStateFromProps" class="headerlink" title="getDerivedStateFromProps"></a>getDerivedStateFromProps</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> getDerivedStateFromProps(&#123; <span class="attr">in</span>: nextIn &#125;, prevState) &#123;</span><br><span class="line">   <span class="keyword">if</span> (nextIn &amp;&amp; prevState.status === UNMOUNTED) &#123;</span><br><span class="line">     <span class="keyword">return</span> &#123; <span class="attr">status</span>: EXITED &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>react在最近的16.4中将该生命周期修改为<code>static</code>，并将函数的调用机制修改为贯穿创建和更新。具体可以查看官方提供的示意图。<br><a href="http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/" target="_blank" rel="noopener">react生命周期</a><br>这段代码的的作用是如果下一次组件的状态是<code>准备进入</code>但是之前的状态是未渲染的，这直接将状态替换为<code>退出的</code></p>
+<p>首先确认下<code>UNMOUTED</code>的状态是如何产生的，只有在组件上添加了<code>unmountOnExit</code>或者<code>mountOnEnter</code>，且初始化状态<code>in</code>为<code>false</code>时，会在初始化阶段定义为该状态。</p>
+<h3 id="render"><a href="#render" class="headerlink" title="render"></a>render</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">    <span class="keyword">const</span> status = <span class="keyword">this</span>.state.status</span><br><span class="line">    <span class="keyword">if</span> (status === UNMOUNTED) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> &#123; children, ...childProps &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="comment">// filter props for Transtition</span></span><br><span class="line">    <span class="keyword">delete</span> childProps.in</span><br><span class="line">    <span class="keyword">delete</span> childProps.mountOnEnter</span><br><span class="line">    <span class="keyword">delete</span> childProps.unmountOnExit</span><br><span class="line">    <span class="keyword">delete</span> childProps.appear</span><br><span class="line">    <span class="keyword">delete</span> childProps.enter</span><br><span class="line">    <span class="keyword">delete</span> childProps.exit</span><br><span class="line">    <span class="keyword">delete</span> childProps.timeout</span><br><span class="line">    <span class="keyword">delete</span> childProps.addEndListener</span><br><span class="line">    <span class="keyword">delete</span> childProps.onEnter</span><br><span class="line">    <span class="keyword">delete</span> childProps.onEntering</span><br><span class="line">    <span class="keyword">delete</span> childProps.onEntered</span><br><span class="line">    <span class="keyword">delete</span> childProps.onExit</span><br><span class="line">    <span class="keyword">delete</span> childProps.onExiting</span><br><span class="line">    <span class="keyword">delete</span> childProps.onExited</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> children === <span class="string">'function'</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> children(status, childProps)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> child = React.Children.only(children)</span><br><span class="line">    <span class="keyword">return</span> React.cloneElement(child, childProps)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>接上面的，当状态为<code>UNMOUNTED</code>时，是不会渲染内容的，所以如果要进入是需要从<code>UNMOUNTED =&gt; EXITED =&gt; ENTERED</code>,当然，如果定义了<code>unmountOnExit</code>，当<code>in</code>为<code>false</code>的时候，组件的状态会退回为<code>UNMOUNTED</code>。</p>
+<p>render函数支持两种渲染方式，函数和react element,所以需要将内部使用的prop删除掉再传递给子组件。</p>
+<h3 id="didMount-amp-didUpdate"><a href="#didMount-amp-didUpdate" class="headerlink" title="didMount &amp; didUpdate"></a>didMount &amp; didUpdate</h3><p>组件在渲染完成之后，有了初始的状态，为了动画开始，需要对组件的状态进行修改。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">updateStatus(mounting = <span class="literal">false</span>, nextStatus) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nextStatus !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// nextStatus will always be ENTERING or EXITING.</span></span><br><span class="line">      <span class="keyword">this</span>.cancelNextCallback()</span><br><span class="line">      <span class="keyword">const</span> node = ReactDOM.findDOMNode(<span class="keyword">this</span>)</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (nextStatus === ENTERING) &#123;</span><br><span class="line">        <span class="keyword">this</span>.performEnter(node, mounting)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.performExit(node)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.props.unmountOnExit &amp;&amp; <span class="keyword">this</span>.state.status === EXITED) &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123; <span class="attr">status</span>: UNMOUNTED &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>渲染完成和更新的钩子会根据状态分别执行<code>performEnter</code>和<code>performExit</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">performEnter(node, mounting) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; enter &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">const</span> appearing = <span class="keyword">this</span>.context.transitionGroup</span><br><span class="line">      ? <span class="keyword">this</span>.context.transitionGroup.isMounting</span><br><span class="line">      : mounting</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> timeouts = <span class="keyword">this</span>.getTimeouts()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// no enter animation skip right to ENTERED</span></span><br><span class="line">    <span class="comment">// if we are mounting and running this it means appear _must_ be set</span></span><br><span class="line">    <span class="keyword">if</span> (!mounting &amp;&amp; !enter) &#123;</span><br><span class="line">      <span class="keyword">this</span>.safeSetState(&#123; <span class="attr">status</span>: ENTERED &#125;, () =&gt; &#123;</span><br><span class="line">        <span class="keyword">this</span>.props.onEntered(node)</span><br><span class="line">      &#125;)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.props.onEnter(node, appearing)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.safeSetState(&#123; <span class="attr">status</span>: ENTERING &#125;, () =&gt; &#123;</span><br><span class="line">      <span class="keyword">this</span>.props.onEntering(node, appearing)</span><br><span class="line"></span><br><span class="line">      <span class="comment">// <span class="doctag">FIXME:</span> appear timeout?</span></span><br><span class="line">      <span class="keyword">this</span>.onTransitionEnd(node, timeouts.enter, () =&gt; &#123;</span><br><span class="line">        <span class="keyword">this</span>.safeSetState(&#123; <span class="attr">status</span>: ENTERED &#125;, () =&gt; &#123;</span><br><span class="line">          <span class="keyword">this</span>.props.onEntered(node, appearing)</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，通过初始状态，逐步调用<code>onEnter,onEntering,onEntered</code>并且更替状态<br><code>ENTERING =&gt; ENTERED</code>。<br>而我们需要的做的就是根据Transition组件返回的状态来实现代码逻辑。</p>
+<h2 id="CSSTransition"><a href="#CSSTransition" class="headerlink" title="CSSTransition"></a>CSSTransition</h2><p>CSSTransition的实现就比较简单了，可以直接看render就可以了<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">    <span class="keyword">const</span> props = &#123; ...this.props &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span> props.classNames;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Transition</span><br><span class="line">        &#123;...props&#125;</span><br><span class="line">        onEnter=&#123;<span class="keyword">this</span>.onEnter&#125;</span><br><span class="line">        onEntered=&#123;<span class="keyword">this</span>.onEntered&#125;</span><br><span class="line">        onEntering=&#123;<span class="keyword">this</span>.onEntering&#125;</span><br><span class="line">        onExit=&#123;<span class="keyword">this</span>.onExit&#125;</span><br><span class="line">        onExiting=&#123;<span class="keyword">this</span>.onExiting&#125;</span><br><span class="line">        onExited=&#123;<span class="keyword">this</span>.onExited&#125;</span><br><span class="line">      /&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>实际上就是对Trsition的一个扩展，作用就是在状态变更的时候加上相应的class名称，如果提前在环境中定义了相应的css定义，则直接可以实现效果，减少了代码。<br>用过vue transition组件的同学应该很熟悉。</p>
+<h2 id="TransitionGroup"><a href="#TransitionGroup" class="headerlink" title="TransitionGroup"></a>TransitionGroup</h2><p>TransitionGroup相当于是在CSSTransition的基础上再进一步的封装。<br>为包裹的子组件提供相应的状态。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> getDerivedStateFromProps(</span><br><span class="line">    nextProps,</span><br><span class="line">    &#123; <span class="attr">children</span>: prevChildMapping, handleExited, firstRender &#125;</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      children: firstRender</span><br><span class="line">        ? getInitialChildMapping(nextProps, handleExited)</span><br><span class="line">        : getNextChildMapping(nextProps, prevChildMapping, handleExited),</span><br><span class="line">      firstRender: <span class="literal">false</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，组件并不是直接进行渲染children,而是进行了一层封装。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">getInitialChildMapping</span>(<span class="params">props, onExited</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> getChildMapping(props.children, child =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> cloneElement(child, &#123;</span><br><span class="line">      onExited: onExited.bind(<span class="literal">null</span>, child),</span><br><span class="line">      <span class="keyword">in</span>: <span class="literal">true</span>,</span><br><span class="line">      appear: getProp(child, <span class="string">'appear'</span>, props),</span><br><span class="line">      enter: getProp(child, <span class="string">'enter'</span>, props),</span><br><span class="line">      exit: getProp(child, <span class="string">'exit'</span>, props),</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">getChildMapping</span>(<span class="params">children, mapFn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> mapper = <span class="function"><span class="params">child</span> =&gt;</span> (mapFn &amp;&amp; isValidElement(child) ? mapFn(child) : child)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> result = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">  <span class="keyword">if</span> (children)</span><br><span class="line">    Children.map(children, c =&gt; c).forEach(<span class="function"><span class="params">child</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// run the map function here instead so that the key is the computed one</span></span><br><span class="line">      result[child.key] = mapper(child)</span><br><span class="line">    &#125;)</span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，封装之后的子组件已经不是之前的了，而且经过克隆的组件会添加默认属性，而且如果之前定义过，则会覆盖。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">   <span class="keyword">const</span> &#123; <span class="attr">component</span>: Component, childFactory, ...props &#125; = <span class="keyword">this</span>.props</span><br><span class="line">   <span class="keyword">const</span> children = values(<span class="keyword">this</span>.state.children).map(childFactory)</span><br><span class="line"></span><br><span class="line">   <span class="keyword">delete</span> props.appear</span><br><span class="line">   <span class="keyword">delete</span> props.enter</span><br><span class="line">   <span class="keyword">delete</span> props.exit</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (Component === <span class="literal">null</span>) &#123;</span><br><span class="line">     <span class="keyword">return</span> children</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">Component</span> &#123;<span class="attr">...props</span>&#125;&gt;</span>&#123;children&#125;<span class="tag">&lt;/<span class="name">Component</span>&gt;</span></span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>render和之前的实现很相似。</p>
+<p>以上是组件进入时候的初始化，但是当组件中子组件数量发生变化的时候又是如何处理的呢？</p>
+<p><code>getNextChildMapping</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">getNextChildMapping</span>(<span class="params">nextProps, prevChildMapping, onExited</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> nextChildMapping = getChildMapping(nextProps.children)</span><br><span class="line">  <span class="keyword">let</span> children = mergeChildMappings(prevChildMapping, nextChildMapping)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">Object</span>.keys(children).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> child = children[key]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!isValidElement(child)) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> hasPrev = key <span class="keyword">in</span> prevChildMapping</span><br><span class="line">    <span class="keyword">const</span> hasNext = key <span class="keyword">in</span> nextChildMapping</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> prevChild = prevChildMapping[key]</span><br><span class="line">    <span class="keyword">const</span> isLeaving = isValidElement(prevChild) &amp;&amp; !prevChild.props.in</span><br><span class="line"></span><br><span class="line">    <span class="comment">// item is new (entering)</span></span><br><span class="line">    <span class="keyword">if</span> (hasNext &amp;&amp; (!hasPrev || isLeaving)) &#123;</span><br><span class="line">      <span class="comment">// console.log('entering', key)</span></span><br><span class="line">      children[key] = cloneElement(child, &#123;</span><br><span class="line">        onExited: onExited.bind(<span class="literal">null</span>, child),</span><br><span class="line">        <span class="keyword">in</span>: <span class="literal">true</span>,</span><br><span class="line">        exit: getProp(child, <span class="string">'exit'</span>, nextProps),</span><br><span class="line">        enter: getProp(child, <span class="string">'enter'</span>, nextProps),</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!hasNext &amp;&amp; hasPrev &amp;&amp; !isLeaving) &#123;</span><br><span class="line">      <span class="comment">// item is old (exiting)</span></span><br><span class="line">      <span class="comment">// console.log('leaving', key)</span></span><br><span class="line">      children[key] = cloneElement(child, &#123; <span class="attr">in</span>: <span class="literal">false</span> &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (hasNext &amp;&amp; hasPrev &amp;&amp; isValidElement(prevChild)) &#123;</span><br><span class="line">      <span class="comment">// item hasn't changed transition states</span></span><br><span class="line">      <span class="comment">// copy over the last transition props;</span></span><br><span class="line">      <span class="comment">// console.log('unchanged', key)</span></span><br><span class="line">      children[key] = cloneElement(child, &#123;</span><br><span class="line">        onExited: onExited.bind(<span class="literal">null</span>, child),</span><br><span class="line">        <span class="keyword">in</span>: prevChild.props.in,</span><br><span class="line">        exit: getProp(child, <span class="string">'exit'</span>, nextProps),</span><br><span class="line">        enter: getProp(child, <span class="string">'enter'</span>, nextProps),</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> children</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一步，clone新的children,<br>第二步，合并之前的children,这里的合并逻辑是将子组件已相对合理的顺序进行整合。然后根据状态的不同，分别进入和离开。<br>第三部，根据状态的不同，clone新的子对象，并添加相应的属性，依旧会覆盖子组件的定义。<br>第四部，render</p>
+<p>以上就是社区实现的动画组件，了解过其实现原理后，再写一些简单的过渡动画，那就再棒不过了。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/codinglobster-blog/2019/04/21/rc-form-source-code-read/" data-toggle="tooltip" data-placement="top" title="rc-form-source-code-read">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/codinglobster-blog/2018/08/08/dva-source-code-read/" data-toggle="tooltip" data-placement="top" title="dva-source-code-read">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/codinglobster-blog/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/codinglobster-blog/tags/#react" title="react">react</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                        <li><a href="#" target="_blank">Foo</a></li>
+                    
+                        <li><a href="#" target="_blank">Bar</a></li>
+                    
+                        <li><a href="#" target="_blank">Example Friends</a></li>
+                    
+                        <li><a href="#" target="_blank">It helps SEO</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hexo-theme-huxblog";
+    var disqus_identifier = "https://codinglobster.github.io/2018/11/19/react-animation/";
+    var disqus_url = "https://codinglobster.github.io/2018/11/19/react-animation/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/Demonbane_x">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Demonbane">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/CiaoSerien">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/demonbane.cn">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/codinglobster">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/kaijun-chen-42089354">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; codinglobster&#39;s Blog 2019 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/codinglobster-blog/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/codinglobster-blog/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/codinglobster-blog/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://codinglobster.github.io/codinglobster-blog/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'huangxuan.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://codinglobster.github.io/codinglobster-blog/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content>
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/codinglobster-blog/img/favicon.ico">
+
+    <title>
+        
+          rc-form-source-code-read - Jeff的博客 | Jeff&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://codinglobster.github.io/codinglobster-blog/2019/04/21/rc-form-source-code-read/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/codinglobster-blog/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/codinglobster-blog/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/codinglobster-blog/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/codinglobster-blog/">codinglobster&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/codinglobster-blog/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/codinglobster-blog/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/codinglobster-blog/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/codinglobster-blog/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://codinglobster.github.io/codinglobster-blog/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/codinglobster-blog/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/codinglobster-blog/tags/#react" title="react">react</a>
+                        
+                          <a class="tag" href="/codinglobster-blog/tags/#antd" title="antd">antd</a>
+                        
+                    </div>
+                    <h1>rc-form-source-code-read</h1>
+                    <h2 class="subheading">rc-form源码阅读</h2>
+                    <span class="meta">
+                        Posted by codinglobster on
+                        2019-04-21
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>state is a precious resource in react component, sometimes we don’t need to stick everything into it. if there’s a lot of value don’t need to react the action, just store it in the HOC at the very begining.</p>
+<p>rc-form是阿里antd组件的基础，很好的分离了Form组件与业务组件的耦合</p>
+<h2 id="Form-create-options"><a href="#Form-create-options" class="headerlink" title="Form.create([options])"></a>Form.create([options])</h2><p><img src="./initialization.png" alt="form"></p>
+<p>第一步，作为HOC,需要将已有组件进行包裹，传入对应的options,获取相应的设置,并返回一个接受组件的函数</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>option.validateMessages</td>
+<td>Preseted messages of <a href="https://github.com/yiminghe/async-validator" target="_blank" rel="noopener">async-validator</a></td>
+<td>Object</td>
+<td>{}</td>
+</tr>
+<tr>
+<td>option.onFieldsChange</td>
+<td>Called when field changed, you can dispatch fields to redux store.</td>
+<td>(props, changed, all): void</td>
+<td>NOOP</td>
+</tr>
+<tr>
+<td>option.onValuesChange</td>
+<td>Called when value changed.</td>
+<td>(props, changed, all): void</td>
+<td>NOOP</td>
+</tr>
+<tr>
+<td>option.mapProps</td>
+<td>Get new props transfered to WrappedComponent.</td>
+<td>(props): Object</td>
+<td>props =&gt; props</td>
+</tr>
+<tr>
+<td>option.mapPropsToFields</td>
+<td>Convert value from props to fields. Used for read fields from redux store.</td>
+<td>(props): Object</td>
+<td>NOOP</td>
+</tr>
+<tr>
+<td>option.fieldNameProp</td>
+<td>Where to store the <code>name</code> argument of <code>getFieldProps</code>.</td>
+<td>String</td>
+<td>-</td>
+</tr>
+<tr>
+<td>option.fieldMetaProp</td>
+<td>Where to store the meta data of <code>getFieldProps</code>.</td>
+<td>String</td>
+<td>-</td>
+</tr>
+<tr>
+<td>option.fieldDataProp</td>
+<td>Where to store the field data</td>
+<td>String</td>
+<td>-</td>
+</tr>
+<tr>
+<td>option.withRef(deprecated)</td>
+<td>Maintain an ref for wrapped component instance, use <code>refs.wrappedComponent</code> to access.</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<h3 id="getInitialState"><a href="#getInitialState" class="headerlink" title="getInitialState"></a>getInitialState</h3><p>由于Form HOC使用的旧的创建方式，所以state的初始化由<code>getInitialState</code>生命周期来完成，但是这个周期只是定义一些内部变量，state本身并不参与到组件的更新。唯一的state变量<code>submitting</code>已经废弃。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.fieldsStore = createFieldsStore(fields || &#123;&#125;);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">this</span>.instances = &#123;&#125;;</span><br><span class="line">       <span class="keyword">this</span>.cachedBind = &#123;&#125;;</span><br><span class="line">       <span class="keyword">this</span>.clearedFieldMetaCache = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">this</span>.renderFields = &#123;&#125;;</span><br><span class="line">       <span class="keyword">this</span>.domFields = &#123;&#125;;</span><br></pre></td></tr></table></figure></p>
+<p><code>fieldStore</code>用来保存所有form组件的field和metaField（原始信息和动态信息）<br><code>cachedBind</code>用来保存所有namespace的回调<br><code>clearedFieldMetaCache</code>当一个组件被卸载的时候，缓存它的field和metaField（原始信息和动态信息）<br><code>renderFields</code>用来保存当前form组件是否已经渲染<br><code>domFields</code>判断当前这个组件是否已经卸载组件，即是否拥有实例。</p>
+<h3 id="componentDidMounted-amp-componentDidUpdate"><a href="#componentDidMounted-amp-componentDidUpdate" class="headerlink" title="componentDidMounted &amp; componentDidUpdate"></a>componentDidMounted &amp; componentDidUpdate</h3><p>在组件加载完成之后会进行一次清洗操作，删除无用的fields<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cleanUpUselessFields() &#123;</span><br><span class="line">        <span class="keyword">const</span> fieldList = <span class="keyword">this</span>.fieldsStore.getAllFieldsName();</span><br><span class="line">        <span class="keyword">const</span> removedList = fieldList.filter(<span class="function"><span class="params">field</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> fieldMeta = <span class="keyword">this</span>.fieldsStore.getFieldMeta(field);</span><br><span class="line">          <span class="keyword">return</span> (!<span class="keyword">this</span>.renderFields[field] &amp;&amp; !<span class="keyword">this</span>.domFields[field] &amp;&amp; !fieldMeta.preserve);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">if</span> (removedList.length) &#123;</span><br><span class="line">          removedList.forEach(<span class="keyword">this</span>.clearField);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.renderFields = &#123;&#125;;</span><br><span class="line">      &#125;,</span><br></pre></td></tr></table></figure></p>
+<p>即这个组件之前已经卸载了或者没有渲染，而且配置里也没有<code>preserve</code>的话，则清空他们在fieldStore里的记录。同时将当前的<code>renderFields</code>清空，因为下次<code>renderField</code>的修改是先于清空的。</p>
+<h3 id="getFieldDecorator-amp-getFieldProps"><a href="#getFieldDecorator-amp-getFieldProps" class="headerlink" title="getFieldDecorator &amp; getFieldProps"></a>getFieldDecorator &amp; getFieldProps</h3><p><img src="./registration.png" alt="form"></p>
+<p>使用这两个方法向<code>fieldStore</code>注册当前组件的<code>fieldMeta</code>,将验证的钩子挂载到组件的<code>props</code>,<br>并缓存一些组件的信息用来验证组件的状态。<br>同时通过改写<code>ref</code>的方法，来保存组件的实例，以及在组件卸载的时候将组件的field和metaField（原始信息和动态信息）保存到<code>clearedFieldMetaCache</code>。</p>
+<p>这个时候组件的初始化就已经完成。</p>
+<h3 id="validate-amp-store-Field"><a href="#validate-amp-store-Field" class="headerlink" title="validate &amp; store Field"></a>validate &amp; store Field</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">validateTriggers.forEach(<span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (inputProps[action]) <span class="keyword">return</span>;</span><br><span class="line">        inputProps[action] = <span class="keyword">this</span>.getCacheBind(name, action, <span class="keyword">this</span>.onCollectValidate);</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure>
+<p>组件在<code>getFieldDecorator</code>注册好了什么时候触发验证方法。比如<code>onClick, onBlur</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">onCollectValidate(name_, action, ...args) &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; field, fieldMeta &#125; = <span class="keyword">this</span>.onCollectCommon(name_, action, args);</span><br><span class="line">        <span class="keyword">const</span> newField = &#123;</span><br><span class="line">          ...field,</span><br><span class="line">          dirty: <span class="literal">true</span>,</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.fieldsStore.setFieldsAsDirty();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.validateFieldsInternal([newField], &#123;</span><br><span class="line">          action,</span><br><span class="line">          options: &#123;</span><br><span class="line">            firstFields: !!fieldMeta.validateFirst,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;,</span><br><span class="line">      </span><br><span class="line">onCollectCommon(name, action, args) &#123;</span><br><span class="line">        <span class="keyword">const</span> fieldMeta = <span class="keyword">this</span>.fieldsStore.getFieldMeta(name);</span><br><span class="line">        <span class="keyword">if</span> (fieldMeta[action]) &#123;</span><br><span class="line">          fieldMeta[action](...args);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (fieldMeta.originalProps &amp;&amp; fieldMeta.originalProps[action]) &#123;</span><br><span class="line">          fieldMeta.originalProps[action](...args);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">const</span> value = fieldMeta.getValueFromEvent ?</span><br><span class="line">          fieldMeta.getValueFromEvent(...args) :</span><br><span class="line">          getValueFromEvent(...args);</span><br><span class="line">        <span class="keyword">if</span> (onValuesChange &amp;&amp; value !== <span class="keyword">this</span>.fieldsStore.getFieldValue(name)) &#123;</span><br><span class="line">          <span class="keyword">const</span> valuesAll = <span class="keyword">this</span>.fieldsStore.getAllValues();</span><br><span class="line">          <span class="keyword">const</span> valuesAllSet = &#123;&#125;;</span><br><span class="line">          valuesAll[name] = value;</span><br><span class="line">          <span class="built_in">Object</span>.keys(valuesAll).forEach(<span class="function"><span class="params">key</span> =&gt;</span> <span class="keyword">set</span>(valuesAllSet, key, valuesAll[key]));</span><br><span class="line">          onValuesChange(&#123;</span><br><span class="line">            [formPropName]: <span class="keyword">this</span>.getForm(),</span><br><span class="line">            ...this.props</span><br><span class="line">          &#125;, <span class="keyword">set</span>(&#123;&#125;, name, value), valuesAllSet);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">const</span> field = <span class="keyword">this</span>.fieldsStore.getField(name);</span><br><span class="line">        <span class="keyword">return</span> (&#123; name, <span class="attr">field</span>: &#123; ...field, value, <span class="attr">touched</span>: <span class="literal">true</span> &#125;, fieldMeta &#125;);</span><br><span class="line">      &#125;,</span><br></pre></td></tr></table></figure>
+<p><code>onClickCommon</code>是用来确认当前组件<code>field</code>,同时要触发原始组件的相应的事件。</p>
+<p>在拿到组件的最新状态后，<code>onCollectValidate</code>会调用<code>validateFieldsInternal</code>进行规则验证。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">validateFieldsInternal(fields, &#123;</span><br><span class="line">        fieldNames,</span><br><span class="line">        action,</span><br><span class="line">        options = &#123;&#125;,</span><br><span class="line">      &#125;, callback)&#123;</span><br><span class="line">      <span class="comment">//=========step1===========</span></span><br><span class="line">        <span class="keyword">const</span> allRules = &#123;&#125;;</span><br><span class="line">        <span class="keyword">const</span> allValues = &#123;&#125;;</span><br><span class="line">        <span class="keyword">const</span> allFields = &#123;&#125;;</span><br><span class="line">        <span class="keyword">const</span> alreadyErrors = &#123;&#125;;</span><br><span class="line">        fields.forEach(<span class="function">(<span class="params">field</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> name = field.name;</span><br><span class="line">          <span class="keyword">if</span> (options.force !== <span class="literal">true</span> &amp;&amp; field.dirty === <span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (field.errors) &#123;</span><br><span class="line">              <span class="keyword">set</span>(alreadyErrors, name, &#123; errors: field.errors &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">const</span> fieldMeta = <span class="keyword">this</span>.fieldsStore.getFieldMeta(name);</span><br><span class="line">          <span class="keyword">const</span> newField = &#123;</span><br><span class="line">            ...field,</span><br><span class="line">          &#125;;</span><br><span class="line">          newField.errors = <span class="literal">undefined</span>;</span><br><span class="line">          newField.validating = <span class="literal">true</span>;</span><br><span class="line">          newField.dirty = <span class="literal">true</span>;</span><br><span class="line">          allRules[name] = <span class="keyword">this</span>.getRules(fieldMeta, action);</span><br><span class="line">          allValues[name] = newField.value;</span><br><span class="line">          allFields[name] = newField;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">this</span>.setFields(allFields);</span><br></pre></td></tr></table></figure></p>
+<p>第一步将需要验证的fields所有信息进行缓存，并通过<br><code>setFields</code>将当前的组件状态更新到视图层。上面说到，HOC的刷新不是通过<code>state</code>完成的，而是通过每次setFields来<code>forceUpdate()</code>.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//===========step2==============</span></span><br><span class="line"><span class="keyword">const</span> validator = <span class="keyword">new</span> AsyncValidator(allRules);</span><br><span class="line">        <span class="keyword">if</span> (validateMessages) &#123;</span><br><span class="line">          validator.messages(validateMessages);</span><br><span class="line">        &#125;</span><br><span class="line">        validator.validate(allValues, options, (errors) =&gt; &#123;</span><br><span class="line">          <span class="keyword">const</span> errorsGroup = &#123;</span><br><span class="line">            ...alreadyErrors,</span><br><span class="line">          &#125;;</span><br><span class="line">          <span class="keyword">if</span> (errors &amp;&amp; errors.length) &#123;</span><br><span class="line">            errors.forEach(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">              <span class="keyword">const</span> errorFieldName = e.field;</span><br><span class="line">              <span class="keyword">let</span> fieldName = errorFieldName;</span><br><span class="line"></span><br><span class="line">              <span class="comment">// Handle using array validation rule.</span></span><br><span class="line">              <span class="comment">// ref: https://github.com/ant-design/ant-design/issues/14275</span></span><br><span class="line">              <span class="built_in">Object</span>.keys(allRules).some(<span class="function">(<span class="params">ruleFieldName</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">const</span> rules = allRules[ruleFieldName] || [];</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Exist if match rule</span></span><br><span class="line">                <span class="keyword">if</span> (ruleFieldName === errorFieldName) &#123;</span><br><span class="line">                  fieldName = ruleFieldName;</span><br><span class="line">                  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Skip if not match array type</span></span><br><span class="line">                <span class="keyword">if</span> (rules.every(<span class="function">(<span class="params">&#123; type &#125;</span>) =&gt;</span> type !== <span class="string">'array'</span>) &amp;&amp; errorFieldName.indexOf(ruleFieldName) !== <span class="number">0</span>) &#123;</span><br><span class="line">                  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Exist if match the field name</span></span><br><span class="line">                <span class="keyword">const</span> restPath = errorFieldName.slice(ruleFieldName.length + <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (<span class="regexp">/\d+/</span>.test(restPath)) &#123;</span><br><span class="line">                  fieldName = ruleFieldName;</span><br><span class="line">                  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">              &#125;);</span><br><span class="line"></span><br><span class="line">              <span class="keyword">const</span> field = <span class="keyword">get</span>(errorsGroup, fieldName);</span><br><span class="line">              if (typeof field !== 'object' || Array.isArray(field)) &#123;</span><br><span class="line">                <span class="keyword">set</span>(errorsGroup, fieldName, &#123; errors: [] &#125;);</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">const</span> fieldErrors = <span class="keyword">get</span>(errorsGroup, fieldName.concat('.errors'));</span><br><span class="line">              fieldErrors.push(e);</span><br><span class="line">            &#125;);</span><br><span class="line">          &#125;</span><br><span class="line">          const expired = [];</span><br><span class="line">          const nowAllFields = &#123;&#125;;</span><br><span class="line">          <span class="built_in">Object</span>.keys(allRules).forEach(<span class="function">(<span class="params">name</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> fieldErrors = <span class="keyword">get</span>(errorsGroup, name);</span><br><span class="line">            const nowField = this.fieldsStore.getField(name);</span><br><span class="line">            // avoid concurrency problems</span><br><span class="line">            if (!eq(nowField.value,allValues[name])) &#123;</span><br><span class="line">              expired.push(&#123;</span><br><span class="line">                name,</span><br><span class="line">              &#125;);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              nowField.errors = fieldErrors &amp;&amp; fieldErrors.errors;</span><br><span class="line">              nowField.value = allValues[name];</span><br><span class="line">              nowField.validating = <span class="literal">false</span>;</span><br><span class="line">              nowField.dirty = <span class="literal">false</span>;</span><br><span class="line">              nowAllFields[name] = nowField;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;);</span><br><span class="line">          <span class="keyword">this</span>.setFields(nowAllFields);</span><br></pre></td></tr></table></figure>
+<p>通过第三方的<code>AsyncValidator</code>，结合从<code>fieldMeta</code>中拿到的验证设置，从而判断当前组件是否通过验证。并将更新后的每个组件状态通过<code>setFields</code>再更新一次。一次由用户操作引起的验证就已经完成。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/codinglobster-blog/2018/11/19/react-animation/" data-toggle="tooltip" data-placement="top" title="react-animation-source-code-read">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/codinglobster-blog/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/codinglobster-blog/tags/#react" title="react">react</a>
+                        
+                          <a class="tag" href="/codinglobster-blog/tags/#antd" title="antd">antd</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
+                    
+                        <li><a href="http://huangxuan.me" target="_blank">Hux Blog</a></li>
+                    
+                        <li><a href="#" target="_blank">Foo</a></li>
+                    
+                        <li><a href="#" target="_blank">Bar</a></li>
+                    
+                        <li><a href="#" target="_blank">Example Friends</a></li>
+                    
+                        <li><a href="#" target="_blank">It helps SEO</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hexo-theme-huxblog";
+    var disqus_identifier = "https://codinglobster.github.io/2019/04/21/rc-form-source-code-read/";
+    var disqus_url = "https://codinglobster.github.io/2019/04/21/rc-form-source-code-read/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/Demonbane_x">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/Demonbane">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/CiaoSerien">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/demonbane.cn">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/codinglobster">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/kaijun-chen-42089354">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; codinglobster&#39;s Blog 2019 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/codinglobster-blog/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/codinglobster-blog/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/codinglobster-blog/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://codinglobster.github.io/codinglobster-blog/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'huangxuan.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://codinglobster.github.io/codinglobster-blog/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
